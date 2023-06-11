@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
-// import Navbar from "../Navbar/Navbar";
+import React, { useState } from "react";
 import { Button, Form, Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../Firebase";
 import "./Register.css";
 import { toast } from "react-toastify";
@@ -18,14 +17,13 @@ const Register = () => {
     const form = event.currentTarget;
     const isValid = form.checkValidity();
     if (isValid) {
-      console.log(email, password);
       try {
-        const user = await createUserWithEmailAndPassword(
+        await createUserWithEmailAndPassword(
           auth,
           email,
           password
         );
-        toast("You are register success")
+        toast("You are register success");
       } catch (error) {
         console.log(error);
       }
@@ -33,14 +31,6 @@ const Register = () => {
     navigate("/login");
   };
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // user is still logged in
-        navigate("/");
-      }
-    });
-  }, [navigate]);
   return (
     <div>
       <Container>

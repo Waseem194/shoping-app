@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import React, { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { Button, Form, Col, Row, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -17,9 +17,9 @@ const Login = () => {
     const form = event.currentTarget;
     const isValid = form.checkValidity();
     if (isValid) {
-      console.log(email, password);
       try {
-        await signInWithEmailAndPassword(auth, email, password);
+        const userData = await signInWithEmailAndPassword(auth, email, password);
+        sessionStorage.setItem("user_token", userData.user.accessToken);
         toast("You are login success");
         navigate("/");
       } catch (error) {
@@ -34,14 +34,6 @@ const Login = () => {
     } else setValidate(true);
   };
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // user is still logged in
-        navigate("/");
-      }
-    });
-  }, [navigate]);
   return (
     <>
       <Container>
